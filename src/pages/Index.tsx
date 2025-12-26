@@ -1,8 +1,9 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
-import { EssentialsGrid } from "@/components/home/EssentialsGrid";
+import { CollectionsSection } from "@/components/home/CollectionsSection";
 import { PromiseSection } from "@/components/home/PromiseSection";
+import { NewsletterSection } from "@/components/home/NewsletterSection";
 
 const Index = () => {
   return (
@@ -10,8 +11,9 @@ const Index = () => {
       <Header />
       <main>
         <HeroSection />
-        <EssentialsGrid />
+        <CollectionsSection />
         <PromiseSection />
+        <NewsletterSection />
       </main>
       <Footer />
     </div>

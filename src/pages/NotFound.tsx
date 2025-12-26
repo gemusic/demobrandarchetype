@@ -1,22 +1,37 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import { Button } from "@/components/ui/button";
 
 const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
-  }, [location.pathname]);
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">404</h1>
-        <p className="mb-4 text-xl text-muted-foreground">Oops! Page not found</p>
-        <a href="/" className="text-primary underline hover:text-primary/90">
-          Return to Home
-        </a>
-      </div>
+    <div className="min-h-screen">
+      <Header />
+      
+      <main className="pt-32 pb-20 flex items-center justify-center min-h-[70vh]">
+        <div className="text-center px-6 max-w-xl">
+          <span className="text-8xl md:text-9xl font-serif text-muted-foreground/20">
+            404
+          </span>
+          <h1 className="font-serif text-3xl md:text-4xl mt-8 mb-4">
+            Cette page s'est échappée
+          </h1>
+          <p className="text-muted-foreground mb-10">
+            La page que vous cherchez n'existe plus ou a été déplacée. 
+            Mais nos collections, elles, sont bien là.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/">
+              <Button size="lg">Retour à l'accueil</Button>
+            </Link>
+            <Link to="/category/fondation">
+              <Button variant="outline" size="lg">Explorer les collections</Button>
+            </Link>
+          </div>
+        </div>
+      </main>
+
+      <Footer />
     </div>
   );
 };

@@ -1,0 +1,508 @@
+export interface Product {
+  id: string;
+  name: string;
+  slug: string;
+  collection: 'fondation' | 'structure' | 'expression';
+  category: string;
+  price: number;
+  images: string[];
+  description: string;
+  story: string;
+  specs: { label: string; value: string }[];
+  materials: string[];
+  colors: string[];
+  dimensions: { width: number; depth: number; height: number };
+  weight: number;
+  warranty: number;
+  deliveryDays: number;
+  inStock: boolean;
+  featured: boolean;
+}
+
+export const products: Product[] = [
+  // FONDATION - Assises
+  {
+    id: "alpha-v",
+    name: "Module Sectionnel Alpha-V",
+    slug: "module-sectionnel-alpha-v",
+    collection: "fondation",
+    category: "Canapé Modulaire",
+    price: 3450,
+    images: [
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=1200",
+      "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?q=80&w=1200",
+      "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?q=80&w=1200",
+      "https://images.unsplash.com/photo-1550581190-9c1c48d21d6c?q=80&w=1200",
+    ],
+    description: "Né dans les ateliers de Porto, le Module Alpha-V incarne l'équilibre parfait entre générosité et précision. Son assise profonde de 58 cm invite à la détente absolue, tandis que sa structure en hévéa certifié promet 15 ans de fidélité sans compromis.",
+    story: "L'archétype de l'assise contemporaine. Chaque courbe est le fruit d'une réflexion profonde sur la posture humaine et l'harmonie spatiale. Notre hévéa, issu de forêts gérées durablement, offre une structure d'une légèreté surprenante alliée à une robustesse exemplaire. Le velours, tissé dans les ateliers de la vallée de la Loire, capture la lumière avec une subtilité qui évolue au fil des heures.",
+    specs: [
+      { label: "Densité mousse", value: "T45 Haute Résilience" },
+      { label: "Certification", value: "CEE A-18, FSC" },
+      { label: "Traitement", value: "Hydrophobe DWR" },
+      { label: "Structure", value: "Hévéa massif" },
+      { label: "Suspension", value: "Sangles élastiques croisées" },
+    ],
+    materials: ["Velours Fumé", "Lin Naturel", "Cuir Pleine Fleur", "Laine Mérinos"],
+    colors: ["Anthracite", "Sable", "Forêt", "Océan", "Terracotta"],
+    dimensions: { width: 210, depth: 105, height: 70 },
+    weight: 78,
+    warranty: 10,
+    deliveryDays: 21,
+    inStock: true,
+    featured: true,
+  },
+  {
+    id: "beta-v",
+    name: "Module Sectionnel Bêta-V",
+    slug: "module-sectionnel-beta-v",
+    collection: "fondation",
+    category: "Canapé Modulaire",
+    price: 3890,
+    images: [
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=1200",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200",
+      "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?q=80&w=1200",
+    ],
+    description: "Le Bêta-V pousse plus loin la philosophie modulaire. Sa configuration asymétrique permet des compositions audacieuses, tandis que son accoudoir élargi devient une surface d'appoint naturelle.",
+    story: "Conçu pour ceux qui refusent les conventions, le Bêta-V questionne la symétrie traditionnelle. Son profil légèrement incliné crée une dynamique visuelle tout en optimisant le confort lombaire. Une pièce pour les espaces qui osent.",
+    specs: [
+      { label: "Densité mousse", value: "T50 Ultra Résilience" },
+      { label: "Certification", value: "CEE A-18, FSC" },
+      { label: "Traitement", value: "Anti-taches Eco" },
+      { label: "Structure", value: "Noyer américain" },
+      { label: "Suspension", value: "Ressorts ensachés" },
+    ],
+    materials: ["Velours Fumé", "Lin Naturel", "Tweed Écossais"],
+    colors: ["Anthracite", "Sable", "Bordeaux"],
+    dimensions: { width: 240, depth: 110, height: 72 },
+    weight: 85,
+    warranty: 10,
+    deliveryDays: 28,
+    inStock: true,
+    featured: true,
+  },
+  {
+    id: "omega-lounge",
+    name: "Fauteuil Omega Lounge",
+    slug: "fauteuil-omega-lounge",
+    collection: "fondation",
+    category: "Fauteuil",
+    price: 2190,
+    images: [
+      "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?q=80&w=1200",
+      "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?q=80&w=1200",
+    ],
+    description: "L'Omega Lounge est une invitation au repos contemplatif. Son dossier enveloppant et ses accoudoirs sculptés créent un cocon personnel, idéal pour la lecture ou la méditation.",
+    story: "Inspiré des fauteuils club des bibliothèques victoriennes, l'Omega a été réinterprété pour le XXIe siècle. Moins imposant, plus ergonomique, il conserve cette aura de sérénité qui transforme un coin de pièce en sanctuaire.",
+    specs: [
+      { label: "Densité mousse", value: "T45 Haute Résilience" },
+      { label: "Certification", value: "OEKO-TEX" },
+      { label: "Structure", value: "Hêtre européen" },
+      { label: "Piètement", value: "Laiton brossé" },
+    ],
+    materials: ["Cuir Pleine Fleur", "Velours", "Lin"],
+    colors: ["Cognac", "Noir", "Olive"],
+    dimensions: { width: 85, depth: 90, height: 95 },
+    weight: 32,
+    warranty: 10,
+    deliveryDays: 14,
+    inStock: true,
+    featured: false,
+  },
+  {
+    id: "atlas-xl",
+    name: "Canapé Grand Format Atlas XL",
+    slug: "canape-atlas-xl",
+    collection: "fondation",
+    category: "Canapé",
+    price: 7890,
+    images: [
+      "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1200",
+      "https://images.unsplash.com/photo-1513519245088-0e12902e35a6?q=80&w=1200",
+    ],
+    description: "L'Atlas XL est notre proposition pour les grands espaces. Plus qu'un canapé, c'est une architecture intérieure qui structure votre salon autour d'un axe de vie social et familial.",
+    story: "Développé en collaboration avec l'architecte d'intérieur Maria Vasquez, l'Atlas XL répond à une commande précise : créer un espace de rassemblement sans sacrifier l'intimité. Chaque module peut accueillir deux personnes confortablement, tout en préservant leur bulle personnelle.",
+    specs: [
+      { label: "Densité mousse", value: "T50 Premium" },
+      { label: "Certification", value: "FSC, PEFC" },
+      { label: "Structure", value: "Chêne massif" },
+      { label: "Modules", value: "6 éléments configurables" },
+    ],
+    materials: ["Lin Premium", "Velours", "Alcantara"],
+    colors: ["Gris Perle", "Blanc Cassé", "Anthracite"],
+    dimensions: { width: 380, depth: 180, height: 68 },
+    weight: 195,
+    warranty: 15,
+    deliveryDays: 42,
+    inStock: true,
+    featured: true,
+  },
+  {
+    id: "compact-c1",
+    name: "Module Compact C1",
+    slug: "module-compact-c1",
+    collection: "fondation",
+    category: "Fauteuil",
+    price: 1890,
+    images: [
+      "https://images.unsplash.com/photo-1550581190-9c1c48d21d6c?q=80&w=1200",
+    ],
+    description: "Le C1 prouve que la modularité n'exige pas de compromis sur l'espace. Parfait pour les appartements urbains, il s'intègre partout tout en offrant une assise généreuse.",
+    story: "Face à la réalité des logements contemporains, nous avons conçu le C1 comme un manifeste : le confort est un droit, pas un luxe réservé aux grands espaces.",
+    specs: [
+      { label: "Densité mousse", value: "T40 Confort" },
+      { label: "Structure", value: "Hévéa" },
+      { label: "Piètement", value: "Acier noir mat" },
+    ],
+    materials: ["Coton Bio", "Lin", "Velours"],
+    colors: ["Naturel", "Gris", "Bleu Nuit"],
+    dimensions: { width: 90, depth: 85, height: 75 },
+    weight: 28,
+    warranty: 10,
+    deliveryDays: 10,
+    inStock: true,
+    featured: false,
+  },
+  {
+    id: "meridienne-s",
+    name: "Méridienne Suspendue S",
+    slug: "meridienne-suspendue-s",
+    collection: "fondation",
+    category: "Méridienne",
+    price: 4250,
+    images: [
+      "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?q=80&w=1200",
+    ],
+    description: "La Méridienne S flotte. Littéralement. Son piètement en retrait crée une illusion de suspension qui allège visuellement n'importe quel espace.",
+    story: "Nous voulions créer une pièce qui défie la gravité. Le résultat est cette méridienne qui semble léviter, invitant au repos tout en apportant une touche de légèreté poétique.",
+    specs: [
+      { label: "Densité mousse", value: "T45 Haute Résilience" },
+      { label: "Structure", value: "Acier et noyer" },
+      { label: "Charge max", value: "250 kg" },
+    ],
+    materials: ["Cuir Nappa", "Velours Premium"],
+    colors: ["Camel", "Noir", "Bordeaux"],
+    dimensions: { width: 180, depth: 75, height: 80 },
+    weight: 45,
+    warranty: 10,
+    deliveryDays: 21,
+    inStock: true,
+    featured: false,
+  },
+
+  // STRUCTURE - Tables et bureaux
+  {
+    id: "table-monolithe",
+    name: "Table Monolithe",
+    slug: "table-monolithe",
+    collection: "structure",
+    category: "Table à Manger",
+    price: 5670,
+    images: [
+      "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?q=80&w=1200",
+    ],
+    description: "Taillée dans un bloc unique de chêne français, la table Monolithe est une déclaration. Son plateau massif de 6 cm d'épaisseur impose le respect tout en invitant au partage.",
+    story: "Chaque Monolithe est unique. Le bois provient de chênes centenaires de la forêt de Tronçais, séchés naturellement pendant 3 ans. Les veines et nœuds racontent l'histoire de l'arbre.",
+    specs: [
+      { label: "Essence", value: "Chêne de Tronçais" },
+      { label: "Épaisseur plateau", value: "6 cm" },
+      { label: "Finition", value: "Huile dure naturelle" },
+      { label: "Piètement", value: "Acier brut ciré" },
+    ],
+    materials: ["Chêne Massif"],
+    colors: ["Naturel", "Fumé", "Blanchi"],
+    dimensions: { width: 240, depth: 100, height: 76 },
+    weight: 120,
+    warranty: 25,
+    deliveryDays: 56,
+    inStock: true,
+    featured: true,
+  },
+  {
+    id: "bureau-nomade",
+    name: "Bureau Nomade",
+    slug: "bureau-nomade",
+    collection: "structure",
+    category: "Bureau",
+    price: 2890,
+    images: [
+      "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?q=80&w=1200",
+    ],
+    description: "Le Bureau Nomade accompagne les nouveaux modes de travail. Léger, déplaçable, il s'installe dans le salon le matin et disparaît le soir.",
+    story: "Conçu pendant le confinement, ce bureau répond à un besoin devenu permanent : travailler chez soi sans sacrifier son espace de vie. Son système de rangement intégré cache câbles et désordre.",
+    specs: [
+      { label: "Essence", value: "Noyer américain" },
+      { label: "Passage câbles", value: "Intégré" },
+      { label: "Tiroir", value: "Push-to-open" },
+    ],
+    materials: ["Noyer Américain"],
+    colors: ["Naturel", "Noir"],
+    dimensions: { width: 120, depth: 60, height: 75 },
+    weight: 38,
+    warranty: 10,
+    deliveryDays: 14,
+    inStock: true,
+    featured: false,
+  },
+  {
+    id: "console-arc",
+    name: "Console Arc",
+    slug: "console-arc",
+    collection: "structure",
+    category: "Console",
+    price: 1450,
+    images: [
+      "https://images.unsplash.com/photo-1513519245088-0e12902e35a6?q=80&w=1200",
+    ],
+    description: "La Console Arc joue avec les courbes. Son piètement arqué en laiton massif contraste avec la rigueur géométrique du plateau en marbre.",
+    story: "Née d'une fascination pour les arcs romains, cette console traduit l'architecture monumentale à l'échelle domestique. Le marbre de Carrare est sélectionné pour ses veines discrètes.",
+    specs: [
+      { label: "Plateau", value: "Marbre de Carrare" },
+      { label: "Piètement", value: "Laiton massif" },
+      { label: "Épaisseur", value: "2 cm" },
+    ],
+    materials: ["Marbre", "Laiton"],
+    colors: ["Blanc Carrare", "Noir Marquina"],
+    dimensions: { width: 120, depth: 35, height: 85 },
+    weight: 42,
+    warranty: 10,
+    deliveryDays: 21,
+    inStock: true,
+    featured: false,
+  },
+  {
+    id: "table-basse-eclipse",
+    name: "Table Basse Éclipse",
+    slug: "table-basse-eclipse",
+    collection: "structure",
+    category: "Table Basse",
+    price: 1890,
+    images: [
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200",
+    ],
+    description: "Deux plateaux qui se chevauchent comme deux astres en éclipse. L'Éclipse offre deux niveaux de rangement tout en conservant une silhouette aérienne.",
+    story: "Le design a émergé d'une observation du ciel. Ce jeu de superposition crée des ombres changeantes au fil de la journée, transformant un meuble en cadran solaire domestique.",
+    specs: [
+      { label: "Plateaux", value: "Verre trempé fumé" },
+      { label: "Structure", value: "Acier noir mat" },
+      { label: "Épaisseur verre", value: "12 mm" },
+    ],
+    materials: ["Verre", "Acier"],
+    colors: ["Fumé/Noir", "Bronze/Laiton"],
+    dimensions: { width: 110, depth: 70, height: 38 },
+    weight: 35,
+    warranty: 5,
+    deliveryDays: 14,
+    inStock: true,
+    featured: false,
+  },
+  {
+    id: "etagere-totem",
+    name: "Étagère Totem",
+    slug: "etagere-totem",
+    collection: "structure",
+    category: "Étagère",
+    price: 3450,
+    images: [
+      "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1200",
+    ],
+    description: "Le Totem s'élève comme une sculpture verticale. Ses niches asymétriques exposent vos objets tout en créant un rythme visuel unique.",
+    story: "Inspirée des totems amérindiens, cette étagère raconte une histoire verticale. Chaque niveau représente un chapitre de votre collection personnelle.",
+    specs: [
+      { label: "Essence", value: "Frêne olivier" },
+      { label: "Finition", value: "Vernis mat" },
+      { label: "Fixation", value: "Murale invisible" },
+    ],
+    materials: ["Frêne Olivier"],
+    colors: ["Naturel", "Noir", "Blanc"],
+    dimensions: { width: 45, depth: 30, height: 200 },
+    weight: 28,
+    warranty: 10,
+    deliveryDays: 21,
+    inStock: true,
+    featured: false,
+  },
+
+  // EXPRESSION - Luminaires et objets
+  {
+    id: "lampe-aura",
+    name: "Lampe Aura",
+    slug: "lampe-aura",
+    collection: "expression",
+    category: "Lampadaire",
+    price: 1290,
+    images: [
+      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=1200",
+    ],
+    description: "Aura projette une lumière diffuse qui semble émaner de nulle part. Son abat-jour en papier washi filtre délicatement l'éclairage pour créer une ambiance sereine.",
+    story: "Développée avec un maître papetier japonais, Aura utilise un papier washi fait main, renforcé par des fibres de kozo. La lumière qui le traverse évoque le soleil filtré par les shoji.",
+    specs: [
+      { label: "Abat-jour", value: "Papier washi" },
+      { label: "Base", value: "Laiton brossé" },
+      { label: "Ampoule", value: "E27, max 60W" },
+      { label: "Variateur", value: "Intégré" },
+    ],
+    materials: ["Papier Washi", "Laiton"],
+    colors: ["Naturel", "Gris"],
+    dimensions: { width: 45, depth: 45, height: 165 },
+    weight: 8,
+    warranty: 5,
+    deliveryDays: 14,
+    inStock: true,
+    featured: true,
+  },
+  {
+    id: "suspension-nebula",
+    name: "Suspension Nebula",
+    slug: "suspension-nebula",
+    collection: "expression",
+    category: "Suspension",
+    price: 890,
+    images: [
+      "https://images.unsplash.com/photo-1513519245088-0e12902e35a6?q=80&w=1200",
+    ],
+    description: "Nebula capture l'essence d'un nuage de poussière cosmique. Ses sphères de verre soufflé à la main contiennent chacune une LED qui pulse doucement.",
+    story: "Chaque Nebula est assemblée individuellement. Les sphères de verre, soufflées à Murano, présentent de subtiles irrégularités qui témoignent de leur fabrication artisanale.",
+    specs: [
+      { label: "Verre", value: "Murano soufflé bouche" },
+      { label: "Sphères", value: "7 éléments" },
+      { label: "LED", value: "Intégrées, 2700K" },
+      { label: "Câble", value: "Textile noir, 2m" },
+    ],
+    materials: ["Verre de Murano", "Laiton"],
+    colors: ["Ambre", "Fumé", "Clair"],
+    dimensions: { width: 60, depth: 60, height: 45 },
+    weight: 5,
+    warranty: 5,
+    deliveryDays: 28,
+    inStock: true,
+    featured: false,
+  },
+  {
+    id: "miroir-portal",
+    name: "Miroir Portal",
+    slug: "miroir-portal",
+    collection: "expression",
+    category: "Miroir",
+    price: 1650,
+    images: [
+      "https://images.unsplash.com/photo-1550581190-9c1c48d21d6c?q=80&w=1200",
+    ],
+    description: "Portal ouvre une fenêtre vers une autre dimension. Son cadre en laiton patiné et sa forme organique transforment le miroir en œuvre d'art.",
+    story: "Inspiré par les tableaux de Magritte, Portal questionne la frontière entre réalité et reflet. Sa forme asymétrique brise la convention du cadre rectangulaire.",
+    specs: [
+      { label: "Cadre", value: "Laiton patiné main" },
+      { label: "Miroir", value: "Argenture haute qualité" },
+      { label: "Fixation", value: "Crochet invisible" },
+    ],
+    materials: ["Laiton", "Verre miroir"],
+    colors: ["Laiton Patiné", "Noir"],
+    dimensions: { width: 70, depth: 3, height: 180 },
+    weight: 18,
+    warranty: 10,
+    deliveryDays: 21,
+    inStock: true,
+    featured: false,
+  },
+  {
+    id: "vase-forme",
+    name: "Vase Forme Libre",
+    slug: "vase-forme-libre",
+    collection: "expression",
+    category: "Objet Déco",
+    price: 290,
+    images: [
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=1200",
+    ],
+    description: "Chaque Vase Forme Libre est une pièce unique. Tournée à la main dans notre atelier provençal, sa silhouette échappe à toute symétrie.",
+    story: "Notre céramiste, Jean-Pierre Moreau, laisse la terre s'exprimer. Le résultat : des vases qui portent l'empreinte de ses mains et l'imprévisibilité de la matière.",
+    specs: [
+      { label: "Matière", value: "Grès chamotté" },
+      { label: "Finition", value: "Émaillage réactif" },
+      { label: "Étanchéité", value: "Oui" },
+    ],
+    materials: ["Grès"],
+    colors: ["Sable", "Bleu Nuit", "Terracotta"],
+    dimensions: { width: 15, depth: 15, height: 35 },
+    weight: 2,
+    warranty: 2,
+    deliveryDays: 7,
+    inStock: true,
+    featured: false,
+  },
+  {
+    id: "tapis-horizon",
+    name: "Tapis Horizon",
+    slug: "tapis-horizon",
+    collection: "expression",
+    category: "Tapis",
+    price: 2450,
+    images: [
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200",
+    ],
+    description: "Horizon dégrade subtilement les couleurs comme un ciel à l'aube. Tissé à la main au Maroc, il apporte chaleur et profondeur à n'importe quel espace.",
+    story: "Nos artisans de Marrakech utilisent des techniques ancestrales transmises de génération en génération. La laine provient de moutons des montagnes de l'Atlas.",
+    specs: [
+      { label: "Matière", value: "Laine Atlas 100%" },
+      { label: "Tissage", value: "Noué main" },
+      { label: "Densité", value: "120 000 nœuds/m²" },
+    ],
+    materials: ["Laine"],
+    colors: ["Aurore", "Crépuscule", "Minuit"],
+    dimensions: { width: 200, depth: 300, height: 1 },
+    weight: 15,
+    warranty: 10,
+    deliveryDays: 42,
+    inStock: true,
+    featured: true,
+  },
+  {
+    id: "bougeoir-equilibre",
+    name: "Bougeoir Équilibre",
+    slug: "bougeoir-equilibre",
+    collection: "expression",
+    category: "Objet Déco",
+    price: 180,
+    images: [
+      "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?q=80&w=1200",
+    ],
+    description: "Équilibre défie les lois de la physique. Ce bougeoir semble sur le point de tomber, mais reste parfaitement stable grâce à un contrepoids dissimulé.",
+    story: "Une méditation sur la stabilité apparente et les forces invisibles. Parfait pour ceux qui aiment les objets qui racontent une histoire.",
+    specs: [
+      { label: "Matière", value: "Laiton massif" },
+      { label: "Finition", value: "Patiné main" },
+      { label: "Bougie", value: "Diamètre 2.2 cm" },
+    ],
+    materials: ["Laiton"],
+    colors: ["Laiton Brossé", "Noir Mat"],
+    dimensions: { width: 12, depth: 12, height: 25 },
+    weight: 1.2,
+    warranty: 5,
+    deliveryDays: 7,
+    inStock: true,
+    featured: false,
+  },
+];
+
+export const getProductById = (id: string): Product | undefined => {
+  return products.find(p => p.id === id);
+};
+
+export const getProductsByCollection = (collection: Product['collection']): Product[] => {
+  return products.filter(p => p.collection === collection);
+};
+
+export const getFeaturedProducts = (): Product[] => {
+  return products.filter(p => p.featured);
+};
+
+export const searchProducts = (query: string): Product[] => {
+  const lowerQuery = query.toLowerCase();
+  return products.filter(p => 
+    p.name.toLowerCase().includes(lowerQuery) ||
+    p.description.toLowerCase().includes(lowerQuery) ||
+    p.category.toLowerCase().includes(lowerQuery)
+  );
+};
