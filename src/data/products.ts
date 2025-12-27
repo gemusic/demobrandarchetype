@@ -483,7 +483,7 @@ export const products: Product[] = [
     category: "Bureau",
     price: 3890,
     images: [
-      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200",
+      "https://images.unsplash.com/photo-1593062096033-9a26b09da705?q=80&w=1200",
     ],
     description: "Le Secrétaire Iris cache son jeu. Fermé, c'est une élégante console. Ouvert, un espace de travail complet.",
     story: "À l'ère du télétravail, avoir un bureau qu'on peut fermer est un luxe.",

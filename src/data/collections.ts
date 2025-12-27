@@ -22,7 +22,7 @@ Nous avons donc imaginé des assises qui grandissent avec vous. Des modules qui 
 
 Chaque pièce Fondation est fabriquée dans nos ateliers partenaires au Portugal et en Italie, par des artisans qui ont appris leur métier de leur père, qui l'avait appris du sien. Cette transmission est notre garantie de qualité.`,
     image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200',
-    productCount: 6,
+    productCount: 12,
   },
   {
     id: 'structure',
@@ -37,7 +37,7 @@ La collection Structure s'adresse à ceux qui comprennent que la qualité du boi
 
 Chaque pièce porte la signature de son créateur et un numéro d'édition. Pas par snobisme, mais par responsabilité : nous voulons savoir où sont nos créations dans cinquante ans.`,
     image: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?q=80&w=1200',
-    productCount: 5,
+    productCount: 10,
   },
   {
     id: 'expression',
@@ -54,7 +54,7 @@ Nous collaborons avec des artisans du monde entier : verriers de Murano, cérami
 
 Expression, c'est aussi notre invitation à la collection. Ces pièces sont accessibles, mais jamais banales. C'est souvent par elles que commence une relation durable avec ARCHETYPES.`,
     image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=1200',
-    productCount: 6,
+    productCount: 10,
   },
 ];
 

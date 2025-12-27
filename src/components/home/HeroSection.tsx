@@ -33,7 +33,7 @@ export function HeroSection() {
         <div className="mt-12 animate-slide-up" style={{ animationDelay: "0.4s" }}>
           <Link to="/category">
             <Button variant="hero" size="xl">
-              Découvrir les 7 Fondations
+              Découvrir nos Collections
             </Button>
           </Link>
         </div>
