@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Minus, Plus } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -7,44 +7,34 @@ import { Button } from "@/components/ui/button";
 import { AiNudge } from "@/components/ai/AiNudge";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-
-const productData = {
-  name: "Module Sectionnel Hévéa Alpha-V",
-  subtitle: "Velours Fumé",
-  price: 3450,
-  images: [
-    "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200",
-    "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=1200",
-    "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?q=80&w=1200",
-    "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?q=80&w=1200",
-    "https://images.unsplash.com/photo-1550581190-9c1c48d21d6c?q=80&w=1200",
-  ],
-  tissus: ["Velours Fumé", "Lin Brut", "Cuir Pleine Fleur", "Laine Mélangée"],
-  couleurs: ["Anthracite", "Sable", "Forêt", "Océan"],
-  orientations: ["Gauche", "Droite"],
-  description: `L'archétype de l'assise contemporaine. Le Module Sectionnel Hévéa Alpha-V incarne notre vision d'un confort sans compromis, où chaque courbe est le fruit d'une réflexion profonde sur la posture humaine et l'harmonie spatiale.
-
-  Notre hévéa, issu de forêts gérées durablement, offre une structure d'une légèreté surprenante alliée à une robustesse exemplaire. Le velours fumé, tissé dans les ateliers de la vallée de la Loire, capture la lumière avec une subtilité qui évolue au fil des heures.`,
-  specs: [
-    { label: "Dimensions", value: "L210 x P105 x H70 cm" },
-    { label: "Poids", value: "78 kg" },
-    { label: "Densité mousse", value: "T45 Haute Résilience" },
-    { label: "Certification", value: "CEE A-18" },
-    { label: "Traitement", value: "Hydrophobe DWR" },
-  ],
-};
+import { getProductById, Product } from "@/data/products";
+import { useCart } from "@/contexts/CartContext";
 
 const ProductPage = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
+  
+  const [product, setProduct] = useState<Product | null>(null);
   const [currentImage, setCurrentImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [selectedTissu, setSelectedTissu] = useState(productData.tissus[0]);
-  const [selectedCouleur, setSelectedCouleur] = useState(productData.couleurs[0]);
-  const [selectedOrientation, setSelectedOrientation] = useState(productData.orientations[0]);
+  const [selectedMaterial, setSelectedMaterial] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
   
   const [showPriceNudge, setShowPriceNudge] = useState(false);
   const [showSizeNudge, setShowSizeNudge] = useState(false);
   const [priceHoverTime, setPriceHoverTime] = useState(0);
+
+  useEffect(() => {
+    if (id) {
+      const foundProduct = getProductById(id);
+      if (foundProduct) {
+        setProduct(foundProduct);
+        setSelectedMaterial(foundProduct.materials[0] || "");
+        setSelectedColor(foundProduct.colors[0] || "");
+      }
+    }
+  }, [id]);
 
   // Détection : temps passé sur le prix
   useEffect(() => {
@@ -55,19 +45,34 @@ const ProductPage = () => {
   }, []);
 
   useEffect(() => {
-    if (priceHoverTime > 8 && !showPriceNudge) {
+    if (priceHoverTime > 12 && !showPriceNudge) {
       setShowPriceNudge(true);
     }
   }, [priceHoverTime, showPriceNudge]);
 
+  if (!product) {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <main className="pt-32 pb-20 text-center">
+          <p className="text-muted-foreground">Produit non trouvé</p>
+          <Link to="/category" className="mt-4 inline-block underline">
+            Retour aux collections
+          </Link>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   const handleAddToCart = () => {
-    toast.success("Ajouté à votre intention", {
-      description: `${productData.name} - ${selectedTissu}`,
-    });
+    addToCart(product, selectedMaterial, selectedColor, quantity);
   };
 
-  const nextImage = () => setCurrentImage(i => (i + 1) % productData.images.length);
-  const prevImage = () => setCurrentImage(i => (i - 1 + productData.images.length) % productData.images.length);
+  const nextImage = () => setCurrentImage(i => (i + 1) % product.images.length);
+  const prevImage = () => setCurrentImage(i => (i - 1 + product.images.length) % product.images.length);
+
+  const monthlyPrice = (product.price / (product.warranty * 12)).toFixed(2);
 
   return (
     <div className="min-h-screen">
@@ -77,51 +82,60 @@ const ProductPage = () => {
         <div className="max-w-7xl mx-auto px-6">
           {/* Breadcrumb */}
           <nav className="mb-8">
-            <Link to="/category" className="text-sm text-muted-foreground hover:text-foreground color-transition">
-              ← Retour aux Assises
+            <Link 
+              to={`/category/${product.collection}`} 
+              className="text-sm text-muted-foreground hover:text-foreground color-transition"
+            >
+              ← Retour à {product.collection === 'fondation' ? 'Fondation' : product.collection === 'structure' ? 'Structure' : 'Expression'}
             </Link>
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
             {/* Galerie */}
             <div className="relative">
-              <div className="aspect-square overflow-hidden">
+              <div className="aspect-square overflow-hidden bg-accent/30">
                 <img
-                  src={productData.images[currentImage]}
-                  alt={productData.name}
+                  src={product.images[currentImage]}
+                  alt={product.name}
                   className="w-full h-full object-cover"
                 />
               </div>
               
               {/* Navigation galerie */}
-              <button
-                onClick={prevImage}
-                className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-background/80 backdrop-blur-sm color-transition hover:bg-background"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-              <button
-                onClick={nextImage}
-                className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-background/80 backdrop-blur-sm color-transition hover:bg-background"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
+              {product.images.length > 1 && (
+                <>
+                  <button
+                    onClick={prevImage}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-background/80 backdrop-blur-sm color-transition hover:bg-background"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+                  <button
+                    onClick={nextImage}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-background/80 backdrop-blur-sm color-transition hover:bg-background"
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </>
+              )}
 
               {/* Miniatures */}
-              <div className="flex gap-2 mt-4">
-                {productData.images.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setCurrentImage(i)}
-                    className={cn(
-                      "w-16 h-16 overflow-hidden border-2 transition-all",
-                      currentImage === i ? "border-foreground" : "border-transparent opacity-60 hover:opacity-100"
-                    )}
-                  >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
-                  </button>
-                ))}
-              </div>
+              {product.images.length > 1 && (
+                <div className="flex gap-2 mt-4">
+                  {product.images.map((img, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentImage(i)}
+                      className={cn(
+                        "w-16 h-16 overflow-hidden border-2 transition-all",
+                        currentImage === i ? "border-foreground" : "border-transparent opacity-60 hover:opacity-100"
+                      )}
+                    >
+                      <img src={img} alt="" className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {/* AI Nudge - Taille */}
               {showSizeNudge && (
@@ -133,7 +147,7 @@ const ProductPage = () => {
                 >
                   <p>
                     Pour valider l'échelle, ce module est compatible avec nos simulateurs AR (Réalité Augmentée) sur mobile. 
-                    La profondeur d'assise est équivalente à un lit double.
+                    Dimensions : {product.dimensions.width} × {product.dimensions.depth} × {product.dimensions.height} cm.
                   </p>
                 </AiNudge>
               )}
@@ -141,15 +155,20 @@ const ProductPage = () => {
 
             {/* Informations produit */}
             <div>
+              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">
+                {product.category}
+              </p>
               <h1 className="font-serif text-3xl md:text-4xl tracking-tight">
-                {productData.name}
+                {product.name}
               </h1>
-              <p className="mt-2 text-muted-foreground">{productData.subtitle}</p>
 
               {/* Prix */}
               <div className="mt-8 relative">
                 <p className="text-2xl font-light">
-                  {productData.price.toLocaleString('fr-FR')} €
+                  {product.price.toLocaleString('fr-FR')} €
+                </p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Livraison sous {product.deliveryDays} jours • Garantie {product.warranty} ans
                 </p>
 
                 {/* AI Nudge - Prix */}
@@ -161,9 +180,9 @@ const ProductPage = () => {
                     className="mt-4"
                   >
                     <p>
-                      Ce module est certifié pour une durée de vie minimale de <strong>15 ans</strong>. 
-                      Le coût réel de possession est donc de <strong>19,16 € par mois</strong>. 
-                      Notre garantie s'étend sur 10 ans.
+                      Cette pièce est certifiée pour une durée de vie minimale de <strong>{product.warranty} ans</strong>. 
+                      Le coût réel de possession est donc de <strong>{monthlyPrice} € par mois</strong>. 
+                      Notre garantie couvre structure et matériaux.
                     </p>
                   </AiNudge>
                 )}
@@ -171,60 +190,41 @@ const ProductPage = () => {
 
               {/* Options */}
               <div className="mt-10 space-y-6">
-                {/* Tissu */}
-                <div>
-                  <label className="text-xs uppercase tracking-wider text-muted-foreground mb-3 block">
-                    Tissu
-                  </label>
-                  <select
-                    value={selectedTissu}
-                    onChange={(e) => setSelectedTissu(e.target.value)}
-                    className="w-full border border-border bg-transparent py-3 px-4 text-sm focus:outline-none focus:border-foreground"
-                  >
-                    {productData.tissus.map(t => (
-                      <option key={t} value={t}>{t}</option>
-                    ))}
-                  </select>
-                </div>
+                {/* Matériau */}
+                {product.materials.length > 0 && (
+                  <div>
+                    <label className="text-xs uppercase tracking-wider text-muted-foreground mb-3 block">
+                      Matériau
+                    </label>
+                    <select
+                      value={selectedMaterial}
+                      onChange={(e) => setSelectedMaterial(e.target.value)}
+                      className="w-full border border-border bg-transparent py-3 px-4 text-sm focus:outline-none focus:border-foreground"
+                    >
+                      {product.materials.map(m => (
+                        <option key={m} value={m}>{m}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
 
                 {/* Couleur */}
-                <div>
-                  <label className="text-xs uppercase tracking-wider text-muted-foreground mb-3 block">
-                    Couleur
-                  </label>
-                  <select
-                    value={selectedCouleur}
-                    onChange={(e) => setSelectedCouleur(e.target.value)}
-                    className="w-full border border-border bg-transparent py-3 px-4 text-sm focus:outline-none focus:border-foreground"
-                  >
-                    {productData.couleurs.map(c => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Orientation */}
-                <div>
-                  <label className="text-xs uppercase tracking-wider text-muted-foreground mb-3 block">
-                    Orientation du Module
-                  </label>
-                  <div className="flex gap-4">
-                    {productData.orientations.map(o => (
-                      <button
-                        key={o}
-                        onClick={() => setSelectedOrientation(o)}
-                        className={cn(
-                          "flex-1 py-3 border text-sm uppercase tracking-wider transition-all",
-                          selectedOrientation === o
-                            ? "border-foreground bg-foreground text-background"
-                            : "border-border hover:border-foreground"
-                        )}
-                      >
-                        {o}
-                      </button>
-                    ))}
+                {product.colors.length > 0 && (
+                  <div>
+                    <label className="text-xs uppercase tracking-wider text-muted-foreground mb-3 block">
+                      Coloris
+                    </label>
+                    <select
+                      value={selectedColor}
+                      onChange={(e) => setSelectedColor(e.target.value)}
+                      className="w-full border border-border bg-transparent py-3 px-4 text-sm focus:outline-none focus:border-foreground"
+                    >
+                      {product.colors.map(c => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                    </select>
                   </div>
-                </div>
+                )}
 
                 {/* Quantité */}
                 <div>
@@ -255,14 +255,22 @@ const ProductPage = () => {
                 size="lg"
                 className="w-full mt-10"
               >
-                Ajouter à l'Intention
+                Ajouter au Panier
               </Button>
 
               {/* Description */}
               <div className="mt-16 border-t border-border pt-10">
-                <h2 className="font-serif text-xl mb-4">La Révélation de l'Assise</h2>
-                <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
-                  {productData.description}
+                <h2 className="font-serif text-xl mb-4">La Révélation</h2>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {product.description}
+                </p>
+              </div>
+
+              {/* Histoire */}
+              <div className="mt-10 border-t border-border pt-10">
+                <h2 className="font-serif text-xl mb-4">L'Histoire</h2>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {product.story}
                 </p>
               </div>
 
@@ -276,7 +284,15 @@ const ProductPage = () => {
                   <ChevronRight className="h-5 w-5" />
                 </button>
                 <dl className="mt-6 space-y-3">
-                  {productData.specs.map(spec => (
+                  <div className="flex justify-between text-sm">
+                    <dt className="text-muted-foreground">Dimensions</dt>
+                    <dd>L{product.dimensions.width} × P{product.dimensions.depth} × H{product.dimensions.height} cm</dd>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <dt className="text-muted-foreground">Poids</dt>
+                    <dd>{product.weight} kg</dd>
+                  </div>
+                  {product.specs.map(spec => (
                     <div key={spec.label} className="flex justify-between text-sm">
                       <dt className="text-muted-foreground">{spec.label}</dt>
                       <dd>{spec.value}</dd>
