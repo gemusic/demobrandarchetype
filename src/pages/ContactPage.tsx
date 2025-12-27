@@ -4,18 +4,45 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { z } from "zod";
+
+const contactSchema = z.object({
+  name: z.string().min(2, "Le nom doit contenir au moins 2 caractères").max(100),
+  email: z.string().email("Adresse email invalide").max(255),
+  subject: z.string().min(1, "Veuillez sélectionner un sujet"),
+  message: z.string().min(10, "Le message doit contenir au moins 10 caractères").max(2000),
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
 
 const ContactPage = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
     subject: "",
     message: "",
   });
+  const [errors, setErrors] = useState<Partial<Record<keyof ContactFormData, string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
+
+    const result = contactSchema.safeParse(formData);
+    
+    if (!result.success) {
+      const fieldErrors: Partial<Record<keyof ContactFormData, string>> = {};
+      result.error.errors.forEach((error) => {
+        if (error.path[0]) {
+          fieldErrors[error.path[0] as keyof ContactFormData] = error.message;
+        }
+      });
+      setErrors(fieldErrors);
+      toast.error("Veuillez corriger les erreurs du formulaire");
+      return;
+    }
+
     setIsSubmitting(true);
     
     // Simulation d'envoi
@@ -30,7 +57,12 @@ const ContactPage = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear error when user starts typing
+    if (errors[name as keyof ContactFormData]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }));
+    }
   };
 
   return (
@@ -68,10 +100,12 @@ const ContactPage = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      required
-                      className="w-full border border-border bg-transparent py-4 px-4 text-base focus:outline-none focus:border-foreground transition-colors"
+                      className={`w-full border bg-transparent py-4 px-4 text-base focus:outline-none transition-colors ${
+                        errors.name ? 'border-destructive focus:border-destructive' : 'border-border focus:border-foreground'
+                      }`}
                       placeholder="Votre nom"
                     />
+                    {errors.name && <p className="text-destructive text-xs mt-1">{errors.name}</p>}
                   </div>
                   <div>
                     <label htmlFor="email" className="block text-xs uppercase tracking-wider text-muted-foreground mb-2">
@@ -83,10 +117,12 @@ const ContactPage = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      required
-                      className="w-full border border-border bg-transparent py-4 px-4 text-base focus:outline-none focus:border-foreground transition-colors"
+                      className={`w-full border bg-transparent py-4 px-4 text-base focus:outline-none transition-colors ${
+                        errors.email ? 'border-destructive focus:border-destructive' : 'border-border focus:border-foreground'
+                      }`}
                       placeholder="votre@email.com"
                     />
+                    {errors.email && <p className="text-destructive text-xs mt-1">{errors.email}</p>}
                   </div>
                 </div>
 
@@ -99,8 +135,9 @@ const ContactPage = () => {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    required
-                    className="w-full border border-border bg-transparent py-4 px-4 text-base focus:outline-none focus:border-foreground transition-colors appearance-none cursor-pointer"
+                    className={`w-full border bg-transparent py-4 px-4 text-base focus:outline-none transition-colors appearance-none cursor-pointer ${
+                      errors.subject ? 'border-destructive focus:border-destructive' : 'border-border focus:border-foreground'
+                    }`}
                   >
                     <option value="">Sélectionnez un sujet</option>
                     <option value="conseil">Conseil personnalisé</option>
@@ -110,6 +147,7 @@ const ContactPage = () => {
                     <option value="professionnel">Projet professionnel</option>
                     <option value="autre">Autre demande</option>
                   </select>
+                  {errors.subject && <p className="text-destructive text-xs mt-1">{errors.subject}</p>}
                 </div>
 
                 <div>
@@ -121,11 +159,13 @@ const ContactPage = () => {
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    required
                     rows={6}
-                    className="w-full border border-border bg-transparent py-4 px-4 text-base focus:outline-none focus:border-foreground transition-colors resize-none"
+                    className={`w-full border bg-transparent py-4 px-4 text-base focus:outline-none transition-colors resize-none ${
+                      errors.message ? 'border-destructive focus:border-destructive' : 'border-border focus:border-foreground'
+                    }`}
                     placeholder="Décrivez votre projet ou votre question..."
                   />
+                  {errors.message && <p className="text-destructive text-xs mt-1">{errors.message}</p>}
                 </div>
 
                 <Button
