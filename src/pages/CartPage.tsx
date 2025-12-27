@@ -6,21 +6,10 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { AiNudge } from "@/components/ai/AiNudge";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-
-const cartItems = [
-  {
-    id: 1,
-    name: "Module Sectionnel Hévéa Alpha-V",
-    variant: "Velours Fumé, Anthracite, Gauche",
-    price: 3450,
-    quantity: 1,
-    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=400",
-  },
-];
+import { useCart } from "@/contexts/CartContext";
 
 const CartPage = () => {
-  const [items, setItems] = useState(cartItems);
+  const { items, updateQuantity, removeFromCart, totalPrice, clearCart } = useCart();
   const [timeOnPage, setTimeOnPage] = useState(0);
   const [showReassuranceNudge, setShowReassuranceNudge] = useState(false);
   const [showConfirmNudge, setShowConfirmNudge] = useState(false);
@@ -35,38 +24,28 @@ const CartPage = () => {
   }, []);
 
   useEffect(() => {
-    if (timeOnPage > 15 && !showReassuranceNudge) {
+    if (timeOnPage > 20 && items.length > 0 && !showReassuranceNudge) {
       setShowReassuranceNudge(true);
     }
-  }, [timeOnPage, showReassuranceNudge]);
+  }, [timeOnPage, showReassuranceNudge, items.length]);
 
   // Détection : modification de quantité = hésitation
   useEffect(() => {
-    if (quantityChanged && !showConfirmNudge) {
+    if (quantityChanged && !showConfirmNudge && items.length > 0) {
       const timer = setTimeout(() => setShowConfirmNudge(true), 1000);
       return () => clearTimeout(timer);
     }
-  }, [quantityChanged, showConfirmNudge]);
+  }, [quantityChanged, showConfirmNudge, items.length]);
 
-  const updateQuantity = (id: number, delta: number) => {
+  const handleQuantityChange = (productId: string, newQuantity: number) => {
     setQuantityChanged(true);
-    setItems(prev =>
-      prev.map(item =>
-        item.id === id
-          ? { ...item, quantity: Math.max(0, item.quantity + delta) }
-          : item
-      ).filter(item => item.quantity > 0)
-    );
+    updateQuantity(productId, newQuantity);
   };
-
-  const removeItem = (id: number) => {
-    setItems(prev => prev.filter(item => item.id !== id));
-  };
-
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handleCheckout = () => {
-    toast.success("Redirection vers le paiement sécurisé...");
+    toast.success("Redirection vers le paiement sécurisé...", {
+      description: "Merci pour votre confiance"
+    });
   };
 
   return (
@@ -76,7 +55,7 @@ const CartPage = () => {
       <main className="pt-32 pb-20">
         <div className="max-w-4xl mx-auto px-6">
           <h1 className="font-serif text-3xl md:text-4xl tracking-tight text-center mb-16">
-            Votre Intention
+            Votre Sélection
           </h1>
 
           {items.length === 0 ? (
@@ -91,12 +70,12 @@ const CartPage = () => {
               {/* Liste des articles */}
               <div className="lg:col-span-2 space-y-8">
                 {items.map(item => (
-                  <div key={item.id} className="flex gap-6 pb-8 border-b border-border">
-                    <Link to={`/product/${item.id}`} className="flex-shrink-0">
+                  <div key={`${item.product.id}-${item.selectedMaterial}-${item.selectedColor}`} className="flex gap-6 pb-8 border-b border-border">
+                    <Link to={`/product/${item.product.id}`} className="flex-shrink-0">
                       <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-28 h-28 object-cover"
+                        src={item.product.images[0]}
+                        alt={item.product.name}
+                        className="w-28 h-28 object-cover bg-accent/30"
                       />
                     </Link>
                     
@@ -104,18 +83,19 @@ const CartPage = () => {
                       <div className="flex justify-between">
                         <div>
                           <Link 
-                            to={`/product/${item.id}`}
+                            to={`/product/${item.product.id}`}
                             className="font-serif text-lg hover:opacity-60 color-transition"
                           >
-                            {item.name}
+                            {item.product.name}
                           </Link>
                           <p className="text-sm text-muted-foreground mt-1">
-                            {item.variant}
+                            {item.selectedMaterial}, {item.selectedColor}
                           </p>
                         </div>
                         <button
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeFromCart(item.product.id)}
                           className="p-1 text-muted-foreground hover:text-foreground color-transition"
+                          aria-label="Retirer l'article"
                         >
                           <X className="h-4 w-4" />
                         </button>
@@ -124,21 +104,23 @@ const CartPage = () => {
                       <div className="flex justify-between items-end mt-6">
                         <div className="flex items-center border border-border">
                           <button
-                            onClick={() => updateQuantity(item.id, -1)}
+                            onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
                             className="p-2 color-transition hover:bg-accent"
+                            aria-label="Réduire la quantité"
                           >
                             <Minus className="h-3 w-3" />
                           </button>
                           <span className="px-4 text-sm">{item.quantity}</span>
                           <button
-                            onClick={() => updateQuantity(item.id, 1)}
+                            onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
                             className="p-2 color-transition hover:bg-accent"
+                            aria-label="Augmenter la quantité"
                           >
                             <Plus className="h-3 w-3" />
                           </button>
                         </div>
                         <p className="text-lg">
-                          {(item.price * item.quantity).toLocaleString('fr-FR')} €
+                          {(item.product.price * item.quantity).toLocaleString('fr-FR')} €
                         </p>
                       </div>
                     </div>
@@ -146,7 +128,7 @@ const CartPage = () => {
                 ))}
 
                 {/* AI Nudge - Confirmation produit */}
-                {showConfirmNudge && (
+                {showConfirmNudge && items.length > 0 && (
                   <AiNudge
                     title="Analyse Cognitive : Confirmation d'Intention"
                     ctaText="Je confirme mon choix"
@@ -157,8 +139,8 @@ const CartPage = () => {
                     className="mt-4"
                   >
                     <p>
-                      Le <strong>Module Alpha-V</strong> est notre meilleur vendeur pour les salons de plus de 40m². 
-                      Il s'aligne parfaitement avec votre choix de revêtement Velours Fumé.
+                      Le <strong>{items[0].product.name}</strong> est notre meilleur vendeur pour les salons de plus de 40m². 
+                      Il s'aligne parfaitement avec votre choix de {items[0].selectedMaterial}.
                     </p>
                   </AiNudge>
                 )}
@@ -166,13 +148,13 @@ const CartPage = () => {
 
               {/* Résumé */}
               <div className="lg:col-span-1">
-                <div className="border border-border p-6">
+                <div className="border border-border p-6 sticky top-28">
                   <h2 className="font-serif text-lg mb-6">Résumé</h2>
                   
                   <div className="space-y-4 text-sm">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Sous-total</span>
-                      <span>{subtotal.toLocaleString('fr-FR')} €</span>
+                      <span>{totalPrice.toLocaleString('fr-FR')} €</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Livraison</span>
@@ -183,7 +165,7 @@ const CartPage = () => {
                   <div className="border-t border-border mt-6 pt-6">
                     <div className="flex justify-between text-lg">
                       <span>Total</span>
-                      <span>{subtotal.toLocaleString('fr-FR')} €</span>
+                      <span>{totalPrice.toLocaleString('fr-FR')} €</span>
                     </div>
                   </div>
 
@@ -197,13 +179,12 @@ const CartPage = () => {
                       dismissable={false}
                     >
                       <p className="mb-3">
-                        Concernant votre <strong>Module Sectionnel Hévéa Alpha-V</strong>, 
-                        nous validons les points suivants avant le paiement :
+                        Nous validons les points suivants avant le paiement :
                       </p>
                       <ul className="space-y-1.5 text-sm">
                         <li>✓ Garantie structurelle : <strong>10 ans (inclus)</strong></li>
                         <li>✓ Retour : <strong>60 jours sans frais (inclus)</strong></li>
-                        <li>✓ Livraison : <strong>Installation offerte (Valeur 250 €)</strong></li>
+                        <li>✓ Livraison : <strong>Installation offerte</strong></li>
                         <li>✓ Paiement : <strong>3x sans frais disponible</strong></li>
                       </ul>
                     </AiNudge>
@@ -217,13 +198,26 @@ const CartPage = () => {
                     Finaliser la Commande
                   </Button>
 
-                  {/* Code promo (friction) */}
+                  {/* Code promo */}
                   <div className="mt-6">
                     <input
                       type="text"
                       placeholder="Code promotionnel"
                       className="w-full border border-border bg-transparent py-3 px-4 text-sm focus:outline-none focus:border-foreground"
                     />
+                  </div>
+
+                  {/* Réassurances */}
+                  <div className="mt-8 space-y-3 text-xs text-muted-foreground">
+                    <p className="flex items-center gap-2">
+                      <span>✓</span> Paiement 100% sécurisé
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <span>✓</span> Livraison avec installation
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <span>✓</span> Service client dédié
+                    </p>
                   </div>
                 </div>
               </div>
