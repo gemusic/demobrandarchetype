@@ -190,13 +190,14 @@ const CartPage = () => {
                     </AiNudge>
                   )}
 
-                  <Button
-                    onClick={handleCheckout}
-                    size="lg"
-                    className="w-full mt-6"
-                  >
-                    Finaliser la Commande
-                  </Button>
+                  <Link to="/checkout" className="block w-full mt-6">
+                    <Button
+                      size="lg"
+                      className="w-full"
+                    >
+                      Finaliser la Commande
+                    </Button>
+                  </Link>
 
                   {/* Code promo */}
                   <div className="mt-6">
