@@ -25,23 +25,33 @@ const CART_STORAGE_KEY = 'archetypes-cart';
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Charger le panier depuis localStorage au montage
   useEffect(() => {
+    // Clear any stale cart data on first load for clean demo experience
     const savedCart = localStorage.getItem(CART_STORAGE_KEY);
     if (savedCart) {
       try {
-        setItems(JSON.parse(savedCart));
+        const parsed = JSON.parse(savedCart);
+        // Only load if it's a valid array
+        if (Array.isArray(parsed)) {
+          setItems(parsed);
+        }
       } catch (e) {
         console.error('Erreur lors du chargement du panier:', e);
+        localStorage.removeItem(CART_STORAGE_KEY);
       }
     }
+    setIsLoaded(true);
   }, []);
 
-  // Sauvegarder le panier dans localStorage à chaque modification
+  // Sauvegarder le panier dans localStorage à chaque modification (only after initial load)
   useEffect(() => {
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
-  }, [items]);
+    if (isLoaded) {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+    }
+  }, [items, isLoaded]);
 
   const addToCart = (product: Product, material: string, color: string, quantity = 1) => {
     setItems(prev => {
