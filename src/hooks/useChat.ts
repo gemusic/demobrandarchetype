@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useChatContext } from '@/contexts/ChatContext';
-import { sendVisitorMessage, pollChatResponse, trackConversion, PaymentData } from '@/lib/chat-api';
+import { sendVisitorMessage, pollChatResponse, trackConversion, PaymentData, notifyChatOpened } from '@/lib/chat-api';
+import { trackMessageSent, trackMessageReceived } from '@/lib/chat-tracking';
 
 export interface ChatMessage {
   id: string;
@@ -17,7 +18,18 @@ export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const [awaitingFirstMessage, setAwaitingFirstMessage] = useState(true);
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
+  const hasNotifiedOpen = useRef(false);
+
+  // Notifier Lindy quand le chat s'ouvre (pour recevoir le premier message)
+  useEffect(() => {
+    if (isOpen && !hasNotifiedOpen.current) {
+      hasNotifiedOpen.current = true;
+      setIsTyping(true);
+      notifyChatOpened(visitorId, window.location.href);
+    }
+  }, [isOpen, visitorId]);
 
   // Polling pour les réponses
   const startPolling = useCallback(() => {
@@ -28,6 +40,7 @@ export function useChat() {
 
       if (response.success && response.message) {
         setIsTyping(false);
+        setAwaitingFirstMessage(false);
 
         const newMessage: ChatMessage = {
           id: 'msg_' + Date.now(),
@@ -38,6 +51,7 @@ export function useChat() {
         };
 
         setMessages(prev => [...prev, newMessage]);
+        trackMessageReceived(visitorId);
 
         if (!isOpen) {
           setHasNewMessage(true);
@@ -82,6 +96,8 @@ export function useChat() {
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsTyping(true);
+    
+    trackMessageSent(visitorId, message);
 
     // Envoyer au serveur
     const success = await sendVisitorMessage(visitorId, message);
@@ -104,5 +120,6 @@ export function useChat() {
     inputValue,
     setInputValue,
     sendMessage,
+    awaitingFirstMessage,
   };
 }

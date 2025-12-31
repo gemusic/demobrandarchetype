@@ -16,6 +16,27 @@ export interface ChatResponse {
   payment_data?: PaymentData;
 }
 
+export async function notifyChatOpened(visitorId: string, pageUrl: string): Promise<boolean> {
+  try {
+    const response = await fetch(`${SERVER_URL}/api/chat-opened`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        visitor_id: visitorId,
+        page_url: pageUrl,
+        timestamp: new Date().toISOString()
+      })
+    });
+
+    return response.ok;
+  } catch (error) {
+    console.error('Error notifying chat opened:', error);
+    return false;
+  }
+}
+
 export async function sendVisitorMessage(visitorId: string, message: string): Promise<boolean> {
   try {
     const response = await fetch(`${SERVER_URL}/api/visitor-message`, {
