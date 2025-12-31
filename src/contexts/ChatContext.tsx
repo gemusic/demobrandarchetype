@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 const STORAGE_KEYS = {
-  visitorId: 'archetypes_visitor_id',
-  sessionId: 'archetypes_session_id',
+  visitorId: 'luminara_visitor_id',
+  sessionId: 'luminara_session_id',
   chatShown: 'archetypes_chat_shown',
 };
 
