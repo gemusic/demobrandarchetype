@@ -1,13 +1,22 @@
-const SERVER_URL = 'https://luminara-express-server.onrender.com';
+const SERVER_URL = 'https://archetypes-server.onrender.com';
 
 export interface PaymentData {
   product: {
+    id?: string;
     name: string;
     description: string;
     price: number;
     image?: string;
   };
-  payment_link?: string;
+  payment_url?: string;
+  cart_data?: Array<{
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    color?: string;
+    image?: string;
+  }>;
 }
 
 export interface ChatResponse {
