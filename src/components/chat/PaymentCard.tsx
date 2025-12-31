@@ -21,7 +21,7 @@ export function PaymentCard({ paymentData }: PaymentCardProps) {
   const handlePayment = () => {
     if (payment_url) {
       trackPaymentLinkClicked(visitorId, { name: product.name, price: product.price }, payment_url);
-      window.open(payment_url, '_blank');
+      window.location.href = payment_url;
     }
   };
 
