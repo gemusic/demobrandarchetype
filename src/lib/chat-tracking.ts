@@ -1,4 +1,4 @@
-const SERVER_URL = 'https://luminara-express-server.onrender.com';
+const SERVER_URL = 'https://archetypes-server.onrender.com';
 
 export interface ChatTrackingEvent {
   visitor_id: string;
