@@ -4,8 +4,7 @@
  * Compatible avec Sofa Chatbot + Express Server
  */
 
-const SERVER_URL = 'https://archetypes-server.onrender.com';
-
+const SERVER_URL = 'https://nine-humans-take.lindy.site';
 // ============================================
 // TYPES & INTERFACES
 // ============================================
