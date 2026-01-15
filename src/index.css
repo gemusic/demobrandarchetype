@@ -1,49 +1,35 @@
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
 
 @layer base {
   :root {
     /* ARCHETYPES - Luxe Minimaliste */
     --background: 0 0% 100%;
     --foreground: 0 0% 10%;
-    
     --card: 0 0% 100%;
     --card-foreground: 0 0% 10%;
-    
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 10%;
-    
-    /* Noir mat pour les éléments natifs */
     --primary: 0 0% 10%;
     --primary-foreground: 0 0% 100%;
-    
     --secondary: 0 0% 97%;
     --secondary-foreground: 0 0% 10%;
-    
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
-    
     --accent: 0 0% 96%;
     --accent-foreground: 0 0% 10%;
-    
-    /* Or Brossé/Bronze - EXCLUSIVEMENT pour les interventions IA */
     --ai-gold: 39 42% 59%;
     --ai-gold-light: 39 42% 95%;
     --ai-gold-foreground: 0 0% 10%;
-    
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    
     --border: 0 0% 90%;
     --input: 0 0% 90%;
     --ring: 0 0% 10%;
-    
     --radius: 0px;
-    
-    /* Sidebar */
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 0% 10%;
     --sidebar-primary: 0 0% 10%;
@@ -57,36 +43,26 @@
   .dark {
     --background: 0 0% 5%;
     --foreground: 0 0% 95%;
-    
     --card: 0 0% 8%;
     --card-foreground: 0 0% 95%;
-    
     --popover: 0 0% 8%;
     --popover-foreground: 0 0% 95%;
-    
     --primary: 0 0% 95%;
     --primary-foreground: 0 0% 10%;
-    
     --secondary: 0 0% 15%;
     --secondary-foreground: 0 0% 95%;
-    
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 65%;
-    
     --accent: 0 0% 15%;
     --accent-foreground: 0 0% 95%;
-    
     --ai-gold: 39 42% 59%;
     --ai-gold-light: 39 30% 15%;
     --ai-gold-foreground: 0 0% 95%;
-    
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 95%;
-    
     --border: 0 0% 20%;
     --input: 0 0% 20%;
     --ring: 0 0% 85%;
-    
     --sidebar-background: 0 0% 8%;
     --sidebar-foreground: 0 0% 95%;
     --sidebar-primary: 0 0% 95%;
@@ -96,24 +72,22 @@
     --sidebar-border: 0 0% 20%;
     --sidebar-ring: 0 0% 85%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
-  
+
   html, body {
     overflow-x: hidden;
   }
-  
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', sans-serif;
     font-weight: 300;
     letter-spacing: 0.01em;
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', serif;
     font-weight: 400;
@@ -125,16 +99,15 @@
   .font-serif {
     font-family: 'Playfair Display', serif;
   }
-  
+
   .font-sans {
     font-family: 'Inter', sans-serif;
   }
-  
-  /* Animation subtile pour les nudges IA */
+
   .ai-nudge-enter {
     animation: nudge-fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
-  
+
   @keyframes nudge-fade-in {
     from {
       opacity: 0;
@@ -145,22 +118,19 @@
       transform: translateY(0);
     }
   }
-  
-  /* Hover élégant */
+
   .hover-lift {
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  
+
   .hover-lift:hover {
     transform: translateY(-4px);
   }
-  
-  /* Transition de couleur douce */
+
   .color-transition {
     transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
   }
-  
-  /* Line clamp pour les descriptions */
+
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
